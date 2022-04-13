@@ -28,5 +28,6 @@ jobs:
           NJU_USERNAME: ${{ secrets.username }}
           NJU_PASSWORD: ${{ secrets.password }}
           CURR_LOCATION: ${{ secrets.location }}
+          COVID_TEST_METHOD: ${{ secrets.method }}
         run: |
           python run.py
