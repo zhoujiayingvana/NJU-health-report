@@ -14,7 +14,7 @@ auth = NjuUiaAuth()
 
 
 def get_zjhs_time(method='YESTERDAY'):
-    log.error("测试method", method)
+    log.info("测试method", method)
     today = datetime.datetime.now(timezone('Asia/Shanghai'))
     yesterday = today + datetime.timedelta(-1)
     if method == 'YESTERDAY':
@@ -31,6 +31,7 @@ def get_zjhs_time(method='YESTERDAY'):
             covid_test_time = yesterday
             log.error(e)
             log.error("设置核酸检测时间为昨日")
+        log.info(f"最近核酸检测时间为{covid_test_time}")
         return covid_test_time
 
 
