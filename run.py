@@ -14,7 +14,6 @@ auth = NjuUiaAuth()
 
 
 def get_zjhs_time(method='YESTERDAY'):
-    log.info("测试method", method)
     today = datetime.datetime.now(timezone('Asia/Shanghai'))
     yesterday = today + datetime.timedelta(-1)
     if method == 'YESTERDAY':
@@ -75,17 +74,17 @@ if __name__ == "__main__":
             continue
 
         dk_info = json.loads(r.text)['data'][0]
-        # if dk_info['TBZT'] == "0":
-        wid = dk_info['WID']
-        data = "?WID={}&IS_TWZC=1&CURR_LOCATION={}&ZJHSJCSJ={}&JRSKMYS=1&IS_HAS_JKQK=1&JZRJRSKMYS=1&SFZJLN=0".format(
-            wid, curr_location, get_zjhs_time(method=method))
-        url = URL_JKDK_APPLY + data
-        log.info('正在打卡')
-        auth.session.get(url)
-        time.sleep(1)
-        # else:
-        #     log.info("今日已打卡！")
-        #     os._exit(0)
+        if dk_info['TBZT'] == "0":
+            wid = dk_info['WID']
+            data = "?WID={}&IS_TWZC=1&CURR_LOCATION={}&ZJHSJCSJ={}&JRSKMYS=1&IS_HAS_JKQK=1&JZRJRSKMYS=1&SFZJLN=0".format(
+                wid, curr_location, get_zjhs_time(method=method))
+            url = URL_JKDK_APPLY + data
+            log.info('正在打卡')
+            auth.session.get(url)
+            time.sleep(1)
+        else:
+            log.info("今日已打卡！")
+            os._exit(0)
 
     log.error("打卡失败，请尝试手动打卡")
     os._exit(-1)
