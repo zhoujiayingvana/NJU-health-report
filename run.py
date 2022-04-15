@@ -31,7 +31,7 @@ def get_zjhs_time(method='YESTERDAY'):
             log.error(e)
             log.error("设置核酸检测时间为昨日")
         log.info(f"最近核酸检测时间为{covid_test_time}")
-        return covid_test_time
+        return covid_test_time.strftime("%Y-%m-%d %-H")
 
 
 if __name__ == "__main__":
