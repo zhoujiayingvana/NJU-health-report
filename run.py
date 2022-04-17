@@ -6,11 +6,12 @@ import time
 import logging
 import datetime
 from pytz import timezone
+import ddddocr
 
 URL_JKDK_LIST = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do'
 URL_JKDK_APPLY = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/saveApplyInfos.do'
 
-auth = NjuUiaAuth()
+auth = NjuUiaAuth(keep_alive=False)  # 关闭多余的连接，避免多次尝试登陆出错
 
 
 def get_zjhs_time(method='YESTERDAY'):
@@ -55,12 +56,18 @@ if __name__ == "__main__":
     log.info('尝试登录...')
 
     if auth.needCaptcha(username):
-        log.error("统一认证平台需要输入验证码才能继续，请手动登录后再重试")
-        os._exit(1)
-
-    ok = auth.login(username, password)
+        log.error("统一认证平台需要输入验证码，尝试识别...")
+        try:
+            img = auth.getCaptchaCode().getvalue()  # convert BytesIO to bytes-like object
+            ocr = ddddocr.DdddOcr()
+            ocr_res = ocr.classification(img)
+            print("识别验证码：", ocr_res)
+        except ValueError as e:
+            log.error(e, "识别接口出错")
+            os._exit(1)
+    ok = auth.login(username, password, ocr_res)
     if not ok:
-        log.error("登录失败，可能是密码错误或网络问题。")
+        log.error("登录失败，可能是密码错误或网络问题或验证码识别错误，请重试。")
         os._exit(1)
 
     log.info('登录成功！')
