@@ -61,7 +61,7 @@ if __name__ == "__main__":
             img = auth.getCaptchaCode().getvalue()  # convert BytesIO to bytes-like object
             ocr = ddddocr.DdddOcr()
             ocr_res = ocr.classification(img)
-            log.info("识别验证码：", ocr_res)
+            log.info(f"识别验证码：{ocr_res}")
         except ValueError as e:
             log.error(e, "识别接口出错")
             os._exit(1)
