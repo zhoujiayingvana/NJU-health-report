@@ -18,21 +18,21 @@ def get_zjhs_time(method='YESTERDAY'):
     today = datetime.datetime.now(timezone('Asia/Shanghai'))
     yesterday = today + datetime.timedelta(-1)
     if method == 'YESTERDAY':
-        return yesterday.strftime("%Y-%m-%d %-H")
+        return yesterday.strftime("%Y-%m-%d %H")
     else:
-        eval_method = eval(method)
         try:
+            eval_method = eval(method)
             start_time = datetime.datetime.strptime(
                 eval_method['start_time'], "%Y-%m-%d").date()
             interval = int(eval_method['interval'])
             covid_test_time = today - \
                 datetime.timedelta((today.date()-start_time).days % interval)
-        except ValueError as e:
+        except Exception as e:
             covid_test_time = yesterday
             log.error(e)
             log.error("设置核酸检测时间为昨日")
         log.info(f"最近核酸检测时间为{covid_test_time}")
-        return covid_test_time.strftime("%Y-%m-%d %-H")
+        return covid_test_time.strftime("%Y-%m-%d %H")
 
 
 if __name__ == "__main__":
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         log.error("统一认证平台需要输入验证码，尝试识别...")
         try:
             img = auth.getCaptchaCode().getvalue()  # convert BytesIO to bytes-like object
-            ocr = ddddocr.DdddOcr()
+            ocr = ddddocr.DdddOcr(show_ad=False)
             ocr_res = ocr.classification(img)
             log.info(f"识别验证码：{ocr_res}")
         except ValueError as e:
