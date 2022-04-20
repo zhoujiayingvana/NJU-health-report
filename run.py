@@ -11,7 +11,7 @@ import ddddocr
 URL_JKDK_LIST = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do'
 URL_JKDK_APPLY = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/saveApplyInfos.do'
 
-auth = NjuUiaAuth(keep_alive=False)  # 关闭多余的连接，避免多次尝试登陆出错
+auth = NjuUiaAuth(keep_alive=True)  # 关闭多余的连接，避免多次尝试登陆出错
 
 
 def get_zjhs_time(method='YESTERDAY'):
@@ -31,7 +31,7 @@ def get_zjhs_time(method='YESTERDAY'):
             covid_test_time = yesterday
             log.error(e)
             log.error("设置核酸检测时间为昨日")
-        log.info(f"最近核酸检测时间为{covid_test_time}")
+        log.info(f'最近核酸检测时间为{covid_test_time.strftime("%Y-%m-%d %H")}')
         return covid_test_time.strftime("%Y-%m-%d %H")
 
 
