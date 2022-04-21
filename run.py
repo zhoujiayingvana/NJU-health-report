@@ -7,10 +7,11 @@ import logging
 import datetime
 from pytz import timezone
 import ddddocr
+from urllib.parse import urlencode
 
 URL_JKDK_LIST = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do'
 URL_JKDK_APPLY = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/saveApplyInfos.do'
-
+URL_JDKD_INDEX = 'http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html'
 auth = NjuUiaAuth(keep_alive=True)  # 关闭多余的连接，避免多次尝试登陆出错
 
 
@@ -71,7 +72,7 @@ if __name__ == "__main__":
         os._exit(1)
 
     log.info('登录成功！')
-
+    force_act = False  # 是否强制打卡
     for count in range(10):
         log.info('尝试获取打卡列表信息...')
         r = auth.session.get(URL_JKDK_LIST)
@@ -81,13 +82,27 @@ if __name__ == "__main__":
             continue
 
         dk_info = json.loads(r.text)['data'][0]
-        if dk_info['TBZT'] == "0":
+        if dk_info['TBZT'] == "0" or force_act == True:
+            force_act = False
             wid = dk_info['WID']
-            data = "?WID={}&IS_TWZC=1&CURR_LOCATION={}&ZJHSJCSJ={}&JRSKMYS=1&IS_HAS_JKQK=1&JZRJRSKMYS=1&SFZJLN=0".format(
-                wid, curr_location, get_zjhs_time(method=method))
-            url = URL_JKDK_APPLY + data
+            param = {
+                'WID': wid,
+                'IS_TWZC': 1,  # 是否体温正常
+                'CURR_LOCATION': curr_location,  # 位置
+                'ZJHSJCSJ': get_zjhs_time(method=method),  # 最近核酸检测时间
+                'JRSKMYS': 1,  # 今日苏康码颜色
+                'IS_HAS_JKQK': 1,  # 健康情况
+                'JZRJRSKMYS': 1,  # 居住人今日苏康码颜色
+                'SFZJLN': 0
+            }
+            headers = {
+                'referer': URL_JDKD_INDEX,  # required since 2022/4/20
+                "X-Requested-With": "com.wisedu.cpdaily.nju",
+                "User-Agent": "Mozilla/5.0 (Linux; Android 11; M2006J10C Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/92.0.4515.131 Mobile Safari/537.36 cpdaily/8.2.7 wisedu/8.2.7"
+            }
+            url = URL_JKDK_APPLY + '?' + urlencode(param)
             log.info('正在打卡')
-            auth.session.get(url)
+            auth.session.get(url, headers=headers)
             time.sleep(1)
         else:
             log.info("今日已打卡！")
