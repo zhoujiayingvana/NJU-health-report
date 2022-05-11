@@ -1,13 +1,13 @@
 name: Health Report Action
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
+  #workflow_dispatch:
+  #push:
+  #  branches:
+  #    - master
   
   schedule:
-    - cron: '0 10 * * *'
+    - cron: '0 5 * * *'
 
 jobs:
   build:

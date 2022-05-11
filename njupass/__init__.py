@@ -21,13 +21,10 @@ class NjuUiaAuth:
         Designed for passing Unified Identity Authentication(UIA) of Nanjing University.
     """
 
-    def __init__(self, keep_alive=True):
+    def __init__(self):
         self.session = requests.Session()
-        # fix "Max retries exceeded with url" bug, close unused link
-        self.session.keep_alive = keep_alive
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0',
-            'Connection': 'close'
         })
 
         r = self.session.get(URL_NJU_UIA_AUTH)

@@ -13,6 +13,7 @@
 - 2022-4-15 添加了“上次核酸时间”字段
 - 2022-4-17 添加了自动识别登陆页面验证码，使用ddddocr库
 - 2022-4-20 随原仓库更新
+- 2022-5-12 随原仓库更新，增加登陆失败自动重试
 
 ## 使用方法
 1. 将本项目 Fork 到自己的仓库。
@@ -26,7 +27,7 @@
 ![](img/1.png)
 
 4. 回到 `Action` 选项卡，重新运行 Action，或者静待自动打卡。
-5. 项目默认是在 13:00（UTC 时间）自动打卡，可以根据需要修改 `.github/workflows/report.yml` 中 `cron` 项。
+5. 项目默认是在 13:00（北京时间）自动打卡，可以根据需要修改 `.github/workflows/report.yml` 中 `cron` 项。
 6. 建议设置 GitHub Actions 通知为 `Send notifications for failed workflows only` 以接收构建失败的通知。这通常是默认设置项。
 
 当 Action 启动之后，可以通过进入 Summary 来查看具体的记录。一次正常的打卡显示效果如下：
