@@ -82,11 +82,16 @@ if __name__ == "__main__":
 
     force_act = False  # 是否强制打卡
     headers = {
-        # required since 2022/4/20
+        # required since 2022/08/27
         'referer': 'http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html',
         "X-Requested-With": "com.wisedu.cpdaily.nju",
-        "User-Agent": "Mozilla/5.0 (Linux; Android 11; M2006J10C Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/92.0.4515.131 Mobile Safari/537.36 cpdaily/8.2.7 wisedu/8.2.7",
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 (4471307264)cpdaily/9.0.14  wisedu/9.0.14",
         "Host": "ehallapp.nju.edu.cn",
+        'Accept': 'application/json, text/plain, */*',
+        'Connection': 'keep-alive',
+        # 'Cookie': '_WEU=YYPeO*RV*JBFWmwCl1eWCBiQgd*zpKgi5U0t7huS9g84BOOBORjIg67wN83mxmgf; iPlanetDirectoryPro=I2q7sOb9YI6oRvKaGSUn7n; MOD_AUTH_CAS=MOD_AUTH_ST-6745229-jdc7HmyHj55lF4L1d7Vs1661586472093-KFu1-cas',
+        'Accept-Language': 'zh-cn',
+        'Accept-Encoding': 'gzip, deflate'
     }
     for _ in range(10):
         log.info('尝试获取打卡列表信息...')
